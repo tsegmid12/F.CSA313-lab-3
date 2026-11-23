@@ -263,7 +263,7 @@ k6 дараах алдааг гаргасан:
 
 Дэлгэрэнгүй гаралт: `results/fail.txt`
 
-Fail test-ийн exit code: `results/fail-exit-code.txt` файлд хадгалсан бодит утгыг тэмдэглэнэ.
+Fail test-ийн exit code: 99 `results/fail-exit-code.txt` .
 
 ## 8. Үр дүнгийн файлууд
 
