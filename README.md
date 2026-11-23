@@ -5,8 +5,7 @@
 **Оюутны код:** `B232270107 `
 **k6 хувилбар:** `k6.exe v2.2.0 (commit/00a9a1b7f5, go1.26.5, windows/amd64)`  
 **Тестийн орчин:** Windows, Node.js, Express, Grafana k6  
-**API хаяг:** `http://localhost:3000`
-
+**API хаяг:** `http://localhost:3000`  
 ---
 
 ## 1. Лабораторийн зорилго
@@ -134,7 +133,7 @@ SLO (Service Level Objective) нь системийн үйлчилгээний �
 | Performance | `/cart/add` latency p95 | < 200 мс | 20 VU, 1 минут |
 | Reliability | `/pay` error rate | < 8% | 20 VU, 1 минут |
 | Availability | Амжилттай хүсэлтийн хувь | ≥ 90% | 2 минут, 10 секундийн зогсолт |
-| Нэмэлт Performance | `/report` latency p95 | < 450 мс | 20 VU |
+| Нэмэлт Performance | `/report` latency p95 | < 450 мс | 20 VU; baseline 1 минут, chaos/fail 2 минут |
 
 ### 5.1 Босго сонгосон үндэслэл
 
@@ -160,6 +159,24 @@ Availability SLO = 90%
 Энэ нь хугацаагаар тооцсон error budget юм.
 
 Харин хүсэлтээр тооцох error budget нь нийт хүсэлтийн 10% байна. Сервер зогссон үед хүсэлтүүд шууд амжилтгүй болж, хэвийн ажиллагааны үеийнхээс өөр хэмжээний алдаа үүсгэж болох тул хугацааны болон хүсэлтийн error budget ижил гарах албагүй.
+
+### 5.3 Reliability Error Budget
+
+Reliability SLO нь `/pay` endpoint-ийн error rate-ийг 8%-аас бага байлгах зорилготой.
+Chaos туршилтаар `/pay` endpoint 1879 хүсэлт хүлээн авч, 267 хүсэлт амжилтгүй болсон.
+
+`Error Budget = 1879 × 0.08 = 150.32 хүсэлт`
+
+Бодит амжилтгүй `/pay` хүсэлт 267 байсан нь зөвшөөрөгдөх 150.32 хүсэлтээс их тул
+reliability error budget хэтэрсэн. Энэ нь chaos туршилтын `/pay` error rate 14.20%
+болж, `rate<0.08` threshold FAIL болсонтой нийцнэ.
+
+### 5.4 Performance Error Budget
+
+Performance-ийн error budget нь latency-ийн p95 босгоос давсан хүсэлтийн эзлэх хувь
+юм. Энэ туршилтад `/cart/add` болон `/report` endpoint-ийн p95 утгыг тус тусын
+SLO босготой харьцуулсан. PASS болон chaos үр дүнд хоёр endpoint-ийн p95 босго
+хангагдсан, харин зориудын FAIL тестэд `/report`-ийн `p(95)<100` босго зөрчигдсөн.
 
 ## 6. k6 Threshold тохиргоо
 
@@ -263,7 +280,7 @@ k6 дараах алдааг гаргасан:
 
 Дэлгэрэнгүй гаралт: `results/fail.txt`
 
-Fail test-ийн exit code: 99 `results/fail-exit-code.txt` .
+Fail test-ийн exit code: `99` (`results/fail-exit-code.txt`).
 
 ## 8. Үр дүнгийн файлууд
 
@@ -287,8 +304,6 @@ Fail test-ийн exit code: 99 `results/fail-exit-code.txt` .
 7. Хугацаагаар тооцсон 12 секундийн error budget болон хүсэлтээр тооцсон error budget нь ачаалал, хүсэлтийн хурд, серверийн хариу үйлдлээс шалтгаалан өөр үр дүнтэй байж болохыг ойлголоо.
 8. Fail тестээр `/report` endpoint-ийн threshold-ийг 100 мс болгож өөрчлөхөд k6 бодит p95 болох 398.04 мс-ийг илрүүлж, тестийг FAIL болгосон.
 9. Туршилтын үр дүнгээс SLO болон threshold нь системийн чанарыг хэмжих, доголдлыг илрүүлэх, системийн найдвартай байдлыг үнэлэхэд чухал ач холбогдолтой болохыг дүгнэлээ.
-
-## 10. GitHub репозиторийн бүтэц
 
 ```text
 lab03/
