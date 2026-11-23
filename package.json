@@ -1,0 +1,23 @@
+{
+  "name": "f.csa313-lab-3",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tsegmid12/F.CSA313-lab-3.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tsegmid12/F.CSA313-lab-3/issues"
+  },
+  "homepage": "https://github.com/tsegmid12/F.CSA313-lab-3#readme",
+  "dependencies": {
+    "express": "^5.3.0"
+  }
+}
